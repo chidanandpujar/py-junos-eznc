@@ -1284,7 +1284,9 @@ class Device(_Connection):
             if hostname is None and self._sock_fd is None:
                 raise ValueError("You must provide either 'host' or 'sock_fd' value")
             if self._proxy_command is not None and self._sock_fd is not None:
-                raise ValueError("'proxy_command' and 'sock_fd' cannot be used together")
+                raise ValueError(
+                    "'proxy_command' and 'sock_fd' cannot be used together"
+                )
             self._hostname = hostname
             # user will default to $USER
             self._auth_user = os.getenv("USER")
@@ -1410,10 +1412,8 @@ class Device(_Connection):
             # build sock from proxy_command if provided
             sock = None
             if self._proxy_command is not None:
-                proxy_cmd = (
-                self._proxy_command
-                    .replace("%h", self._hostname)
-                    .replace("%p", str(self._port))
+                proxy_cmd = self._proxy_command.replace("%h", self._hostname).replace(
+                    "%p", str(self._port)
                 )
                 sock = paramiko.proxy.ProxyCommand(proxy_cmd)
 
