@@ -1230,6 +1230,13 @@ class Device(_Connection):
             *OPTIONAL* To enable ssh_known hostkey verify
             default is ``False``.
 
+        :param str proxy_command:
+            *OPTIONAL* The SSH ProxyCommand string to use when connecting
+            through a bastion/jump host, e.g.
+            ``"ssh -W %h:%p bastion.example.com"``.
+            Wraps :class:`paramiko.proxy.ProxyCommand` and is passed as the
+            ``sock`` argument to the underlying ncclient transport.
+            Cannot be combined with ``sock_fd``.
         """
 
         # ----------------------------------------
@@ -1251,6 +1258,8 @@ class Device(_Connection):
         self._allow_agent = kvargs.get("allow_agent", None)
         self._bind_addr = kvargs.get("bind_addr", None)
         self._hostkey_verify = kvargs.get("hostkey_verify", False)
+        if self._sock_fd is None:
+            self._proxy_command = kvargs.get("proxy_command", None)
         if self._fact_style != "new":
             warnings.warn(
                 "fact-style %s will be removed in a future "
@@ -1397,11 +1406,22 @@ class Device(_Connection):
             else:
                 hostkey_verify = self._hostkey_verify
 
+            # build sock from proxy_command if provided
+            sock = None
+            if self._proxy_command is not None:
+                proxy_cmd = (
+                self._proxy_command
+                    .replace("%h", self._hostname)
+                    .replace("%p", str(self._port))
+                )
+                sock = paramiko.proxy.ProxyCommand(proxy_cmd)
+
             # open connection using ncclient transport
             self._conn = netconf_ssh.connect(
                 host=self._hostname,
                 port=self._port,
                 sock_fd=self._sock_fd,
+                sock=sock,  # support for ProxyCommand parameter
                 username=self._auth_user,
                 password=self._auth_password,
                 hostkey_verify=hostkey_verify,
