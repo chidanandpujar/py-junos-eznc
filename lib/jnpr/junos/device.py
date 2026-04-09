@@ -1258,8 +1258,7 @@ class Device(_Connection):
         self._allow_agent = kvargs.get("allow_agent", None)
         self._bind_addr = kvargs.get("bind_addr", None)
         self._hostkey_verify = kvargs.get("hostkey_verify", False)
-        if self._sock_fd is None:
-            self._proxy_command = kvargs.get("proxy_command", None)
+        self._proxy_command = kvargs.get("proxy_command", None)
         if self._fact_style != "new":
             warnings.warn(
                 "fact-style %s will be removed in a future "
@@ -1284,6 +1283,8 @@ class Device(_Connection):
             # --------------------------
             if hostname is None and self._sock_fd is None:
                 raise ValueError("You must provide either 'host' or 'sock_fd' value")
+            if self._proxy_command is not None and self._sock_fd is not None:
+                raise ValueError("'proxy_command' and 'sock_fd' cannot be used together")
             self._hostname = hostname
             # user will default to $USER
             self._auth_user = os.getenv("USER")
