@@ -888,9 +888,7 @@ class TestSW(unittest.TestCase):
 
     @patch("jnpr.junos.Device.execute")
     def test_sw_install_issu_with_routing_instance(self, mock_execute):
-        self.sw.install(
-            "file", no_copy=True, issu=True, routing_instance="mgmt_junos"
-        )
+        self.sw.install("file", no_copy=True, issu=True, routing_instance="mgmt_junos")
         rpc = etree.tostring(mock_execute.call_args[0][0]).decode("utf-8")
         self.assertTrue("<routing-instance>mgmt_junos</routing-instance>" in rpc)
 
