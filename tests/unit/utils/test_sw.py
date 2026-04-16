@@ -867,6 +867,40 @@ class TestSW(unittest.TestCase):
         )
 
     @patch("jnpr.junos.Device.execute")
+    def test_sw_install_with_routing_instance(self, mock_execute):
+        self.sw.install("file", no_copy=True, routing_instance="mgmt_junos")
+        rpc = etree.tostring(mock_execute.call_args[0][0]).decode("utf-8")
+        self.assertTrue("<routing-instance>mgmt_junos</routing-instance>" in rpc)
+
+    @patch("jnpr.junos.Device.execute")
+    def test_sw_install_with_satellite_name(self, mock_execute):
+        self.sw.install("file", no_copy=True, satellite_name="sat1")
+        rpc = etree.tostring(mock_execute.call_args[0][0]).decode("utf-8")
+        self.assertTrue("<device-list>sat1</device-list>" in rpc)
+
+    @patch("jnpr.junos.Device.execute")
+    def test_sw_install_with_satellite_name_list(self, mock_execute):
+        self.sw.install("file", no_copy=True, satellite_name=["sat1", "sat2"])
+        rpc = etree.tostring(mock_execute.call_args[0][0]).decode("utf-8")
+        self.assertTrue(rpc.count("<device-list>") == 2)
+        self.assertTrue("<device-list>sat1</device-list>" in rpc)
+        self.assertTrue("<device-list>sat2</device-list>" in rpc)
+
+    @patch("jnpr.junos.Device.execute")
+    def test_sw_install_issu_with_routing_instance(self, mock_execute):
+        self.sw.install(
+            "file", no_copy=True, issu=True, routing_instance="mgmt_junos"
+        )
+        rpc = etree.tostring(mock_execute.call_args[0][0]).decode("utf-8")
+        self.assertTrue("<routing-instance>mgmt_junos</routing-instance>" in rpc)
+
+    @patch("jnpr.junos.Device.execute")
+    def test_sw_install_nssu_with_satellite_name(self, mock_execute):
+        self.sw.install("file", no_copy=True, nssu=True, satellite_name="sat1")
+        rpc = etree.tostring(mock_execute.call_args[0][0]).decode("utf-8")
+        self.assertTrue("<device-list>sat1</device-list>" in rpc)
+
+    @patch("jnpr.junos.Device.execute")
     def test_sw_rollback(self, mock_execute):
         rsp = (
             "<rpc-reply><output>junos-vsrx-12.1X46-D30.2-domestic will "

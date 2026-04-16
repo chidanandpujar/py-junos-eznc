@@ -705,6 +705,8 @@ class SW(Util):
         cleanfs_timeout=300,
         checksum_timeout=300,
         checksum_algorithm="md5",
+        routing_instance=None,
+        satellite_name=None,
         force_copy=False,
         all_re=True,
         member_id=None,
@@ -888,6 +890,12 @@ class SW(Util):
                 progress(self._dev, report)
 
         self.log = _progress
+
+        if routing_instance is not None and "routing_instance" not in kwargs:
+            kwargs["routing_instance"] = routing_instance
+
+        if satellite_name is not None and "device_list" not in kwargs:
+            kwargs["device_list"] = satellite_name
 
         # ---------------------------------------------------------------------
         # Before doing anything, Do check if any pending install exists.
