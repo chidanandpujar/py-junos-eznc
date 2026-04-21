@@ -131,9 +131,7 @@ class TestDeviceSsh(unittest.TestCase):
             ssh_private_key_file="~/.ssh/id_rsa",
             proxy_command="ssh -W %h:%p -q netops@y.y.y.y",
         )
-        self.assertEqual(
-            self.dev._proxy_command, "ssh -W %h:%p -q netops@y.y.y.y"
-        )
+        self.assertEqual(self.dev._proxy_command, "ssh -W %h:%p -q netops@y.y.y.y")
 
     def test_device_proxy_empty_string_not_used(self):
         """An empty proxy_command string should not activate proxy routing."""
