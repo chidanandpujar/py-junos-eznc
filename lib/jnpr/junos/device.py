@@ -1411,7 +1411,7 @@ class Device(_Connection):
 
             # build sock from proxy_command if provided
             sock = None
-            if self._proxy_command is not None:
+            if self._proxy_command:
                 proxy_cmd = self._proxy_command.replace("%h", self._hostname).replace(
                     "%p", str(self._port)
                 )
