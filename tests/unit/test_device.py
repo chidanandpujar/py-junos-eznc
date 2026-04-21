@@ -554,9 +554,10 @@ class TestDevice(unittest.TestCase):
     @patch("ncclient.manager.connect")
     @patch("jnpr.junos.Device.execute")
     def test_device_open_with_proxy_command(self, mock_connect, mock_execute):
-        with patch("jnpr.junos.utils.fs.FS.cat") as mock_cat, patch(
-            "paramiko.proxy.ProxyCommand"
-        ) as mock_proxy:
+        with (
+            patch("jnpr.junos.utils.fs.FS.cat") as mock_cat,
+            patch("paramiko.proxy.ProxyCommand") as mock_proxy,
+        ):
             mock_cat.return_value = "\n    domain jls.net\n"
             mock_connect.side_effect = self._mock_manager
             mock_execute.side_effect = self._mock_manager
@@ -575,10 +576,13 @@ class TestDevice(unittest.TestCase):
 
     @patch("ncclient.manager.connect")
     @patch("jnpr.junos.Device.execute")
-    def test_device_open_with_proxy_command_empty_string(self, mock_connect, mock_execute):
-        with patch("jnpr.junos.utils.fs.FS.cat") as mock_cat, patch(
-            "paramiko.proxy.ProxyCommand"
-        ) as mock_proxy:
+    def test_device_open_with_proxy_command_empty_string(
+        self, mock_connect, mock_execute
+    ):
+        with (
+            patch("jnpr.junos.utils.fs.FS.cat") as mock_cat,
+            patch("paramiko.proxy.ProxyCommand") as mock_proxy,
+        ):
             mock_cat.return_value = "\n    domain jls.net\n"
             mock_connect.side_effect = self._mock_manager
             mock_execute.side_effect = self._mock_manager
