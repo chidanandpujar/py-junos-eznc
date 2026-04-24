@@ -72,9 +72,9 @@ Avoid brittle assertions on internal private state unless that is the public con
 
 ### 6) Validate quickly with targeted test runs
 Install required dependencies before executing tests:
-- `python -m pip install ntc_templates==1.4.1 textfsm==0.4.1 `
-- `python -m pip install -r requirements.txt`
-- `python -m pip install nose2 junos-eznc`
+- `python3 -m pip install ntc_templates==1.4.1 textfsm==0.4.1 `
+- `python3 -m pip install -r requirements.txt`
+- `python3 -m pip install nose2 junos-eznc`
 
 
 Run generated/updated testcase modules first (targeted validation), for example:
