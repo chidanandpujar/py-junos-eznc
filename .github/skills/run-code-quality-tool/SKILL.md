@@ -18,7 +18,7 @@ Run formatting checks and static analysis for Python changes under `lib/jnpr/jun
 
 ### 1) Install required code-quality tools
 Install pylint and ruff before running checks:
-- `python -m pip install pylint ruff`
+- `python3 -m pip install pylint ruff`
 
 ### 2) Detect changed Python source files
 Collect changed files under `lib/jnpr/junos` and keep only `.py` files.
