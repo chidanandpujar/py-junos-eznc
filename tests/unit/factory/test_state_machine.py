@@ -3,7 +3,11 @@ import warnings
 
 import pyparsing as pp
 
-from jnpr.junos.factory.state_machine import Identifiers, convert_to_data_type, data_type
+from jnpr.junos.factory.state_machine import (
+    Identifiers,
+    convert_to_data_type,
+    data_type,
+)
 
 
 class TestIdentifiersNumbers(unittest.TestCase):
@@ -38,7 +42,9 @@ class TestIdentifiersNumbers(unittest.TestCase):
             warnings.simplefilter("always")
             Identifiers.numbers.parseString("99", parseAll=True)
         pyparsing_warnings = [
-            w for w in caught if issubclass(w.category, DeprecationWarning)
+            w
+            for w in caught
+            if issubclass(w.category, DeprecationWarning)
             and "setParseAction" in str(w.message)
         ]
         self.assertEqual(pyparsing_warnings, [])
@@ -66,7 +72,9 @@ class TestIdentifiersWords(unittest.TestCase):
             warnings.simplefilter("always")
             Identifiers.words.parseString("test words", parseAll=True)
         pyparsing_warnings = [
-            w for w in caught if issubclass(w.category, DeprecationWarning)
+            w
+            for w in caught
+            if issubclass(w.category, DeprecationWarning)
             and "setParseAction" in str(w.message)
         ]
         self.assertEqual(pyparsing_warnings, [])
